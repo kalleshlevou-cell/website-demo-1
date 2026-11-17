@@ -35,9 +35,9 @@ export type AudienceScale =
   | 'mid_market'
   | 'enterprise'
 
-export type Timeline = 'flexible' | 'standard' | 'asap'
+export type Timeline = 'asap' | 'm3' | 'm6' | 'm12' | 'flexible'
 
-export type BudgetTier = 'lean' | 'standard' | 'premium' | 'not_sure'
+export type BudgetTier = 'lean' | 'mid' | 'premium' | 'enterprise' | 'not_sure'
 
 export type DomainId = 'engineering' | 'marketing' | 'ai' | 'cloud'
 

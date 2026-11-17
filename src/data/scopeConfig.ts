@@ -145,7 +145,8 @@ export const RISK_RULES: readonly RiskRule[] = [
         }
       : null,
   (ctx) =>
-    ctx.input.timeline === 'asap' && ctx.weeks > 20
+    (ctx.input.timeline === 'asap' && ctx.weeks > 16) ||
+    (ctx.input.timeline === 'm3' && ctx.weeks > 20)
       ? {
           title: 'Aggressive timeline vs scope',
           mitigation: 'trim to an MVP scope first',

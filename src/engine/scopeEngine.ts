@@ -48,9 +48,10 @@ const PHASE_DEFS: readonly { name: PhaseName; percent: number }[] = [
 // Budget tier USD ranges. 'not_sure' is not a concrete range — it is inferred.
 type ConcreteBudgetTier = Exclude<BudgetTier, 'not_sure'>
 const BUDGET_RANGE: Readonly<Record<ConcreteBudgetTier, readonly [number, number]>> = {
-  lean: [15000, 40000],
-  standard: [40000, 90000],
-  premium: [90000, 200000],
+  lean: [5000, 15000],
+  mid: [15000, 50000],
+  premium: [50000, 150000],
+  enterprise: [150000, 400000],
 }
 
 // Headcount scaling by audience scale; per-role caps stop counts from bloating.
@@ -185,15 +186,18 @@ const PROJECT_TYPE_LABELS: Readonly<Record<ProjectType, string>> = {
 }
 
 const TIMELINE_LABELS: Readonly<Record<Timeline, string>> = {
-  flexible: 'Flexible',
-  standard: 'Standard',
   asap: 'ASAP',
+  m3: '~3 months',
+  m6: '~6 months',
+  m12: '~12 months',
+  flexible: 'Flexible',
 }
 
 const TIER_LABELS: Readonly<Record<ConcreteBudgetTier, string>> = {
   lean: 'Lean',
-  standard: 'Standard',
+  mid: 'Mid',
   premium: 'Premium',
+  enterprise: 'Enterprise',
 }
 
 // --- Small helpers ---------------------------------------------------------
@@ -235,8 +239,9 @@ function computePhases(weeks: number): Phase[] {
 
 function inferTier(totalEffort: number): ConcreteBudgetTier {
   if (totalEffort < 70) return 'lean'
-  if (totalEffort < 150) return 'standard'
-  return 'premium'
+  if (totalEffort < 160) return 'mid'
+  if (totalEffort < 320) return 'premium'
+  return 'enterprise'
 }
 
 function computeBudget(
@@ -459,8 +464,8 @@ export const SAMPLE_INPUT: ScopeInput = {
   oneLiner: 'A multi-tenant SaaS platform with AI-assisted workflows.',
   features: ['auth', 'payments', 'dashboard', 'multi_tenant', 'ai_features'],
   audienceScale: 'mid_market',
-  timeline: 'standard',
-  budgetTier: 'standard',
+  timeline: 'm6',
+  budgetTier: 'mid',
 }
 
 /** Compute the brief for the canonical sample input. */
