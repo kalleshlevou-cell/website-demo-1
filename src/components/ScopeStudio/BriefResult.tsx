@@ -65,7 +65,7 @@ export function BriefResult({ brief, shareUrl, onReset }: BriefResultProps) {
 
   function flash(kind: 'link' | 'markdown') {
     setCopied(kind)
-    window.setTimeout(() => setCopied((c) => (c === kind ? null : c)), 1800)
+    setTimeout(() => setCopied((c) => (c === kind ? null : c)), 1800)
   }
 
   // Clipboard write with a legacy fallback for non-secure contexts.
@@ -121,18 +121,20 @@ export function BriefResult({ brief, shareUrl, onReset }: BriefResultProps) {
     const subject = `Project scope brief \u2014 ${
       brief.oneLiner || labelFor(PROJECT_TYPES, brief.projectType)
     }`
-    const bodyLines = [
+    // Keep the body short so it survives email client URI length limits (~2 kB).
+    // The share URL lets the recipient (or Cynbit) reconstruct the full brief.
+    const body = [
       brief.summary,
       '',
-      'Here\u2019s the one-line scope summary above. The full brief \u2014 timeline, team, budget range, risks, and ROI notes \u2014 is attached below and also available at:',
-      '',
+      'Full brief available at:',
       shareUrl,
       '',
-      '---',
-      '',
-      briefToMarkdown(brief),
-    ]
-    const body = bodyLines.join('\n')
+      `Project: ${labelFor(PROJECT_TYPES, brief.projectType)}`,
+      `Scale: ${labelFor(SCALES, brief.audienceScale)}`,
+      `Timeline: ${labelFor(TIMELINES, brief.timeline)}`,
+      `Budget: ${brief.estimatedBudgetRange}`,
+      `Est. duration: ${brief.weeks} weeks`,
+    ].join('\n')
     window.location.href = `mailto:hello@cynbit.com?subject=${encodeURIComponent(
       subject,
     )}&body=${encodeURIComponent(body)}`
@@ -276,11 +278,11 @@ export function BriefResult({ brief, shareUrl, onReset }: BriefResultProps) {
       <div className="brief-reveal mt-8" style={{ animationDelay: '540ms' }}>
         <SectionLabel>ROI / value notes</SectionLabel>
         <ul className="mt-3 space-y-2">
-          {brief.roiNotes.map((n, i) => (
-            <li key={i} className="text-sm text-slate-300">
-              {n}
-            </li>
-          ))}
+          {brief.roiNotes.map((n) => (
+              <li key={n} className="text-sm text-slate-300">
+                {n}
+              </li>
+            ))}
         </ul>
       </div>
 
