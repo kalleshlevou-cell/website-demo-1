@@ -91,7 +91,12 @@ export function ScopeStudio() {
 
   return (
     <section id="studio" className="relative py-20 sm:py-28">
-      <div className="mx-auto max-w-3xl px-6">
+      {/* Decorative background orb */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/10 blur-[100px]"
+      />
+      <div className="relative mx-auto max-w-4xl px-6">
         <div className="max-w-2xl">
           <p className="text-sm font-semibold uppercase tracking-widest text-violet-400">
             Scope Studio
@@ -106,7 +111,7 @@ export function ScopeStudio() {
           </p>
         </div>
 
-        <div className="mt-10">
+        <div className="mt-10 max-w-3xl">
           {brief && input ? (
             <BriefResult brief={brief} shareUrl={shareUrl} onReset={startOver} />
           ) : (

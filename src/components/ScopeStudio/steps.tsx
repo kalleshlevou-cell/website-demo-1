@@ -133,7 +133,7 @@ function RadioCard({
         }`}
       >
         <span
-          className={`text-sm font-medium transition ${checked ? 'text-white' : 'text-slate-200'}`}
+          className={`min-w-0 break-words text-sm font-medium transition ${checked ? 'text-white' : 'text-slate-200'}`}
         >
           {label}
         </span>
@@ -173,11 +173,11 @@ function FeatureCard({
         }`}
       >
         <span
-          className={`text-sm font-medium transition ${checked ? 'text-white' : 'text-slate-200'}`}
+          className={`min-w-0 break-words text-sm font-medium transition ${checked ? 'text-white' : 'text-slate-200'}`}
         >
           {label}
         </span>
-        <span className="flex items-center gap-2">
+        <span className="flex shrink-0 items-center gap-2">
           <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs font-medium text-slate-400">
             {weight}
           </span>

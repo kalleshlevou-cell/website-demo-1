@@ -39,13 +39,13 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
       <nav
-        className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4"
+        className="mx-auto flex max-w-6xl items-center justify-between overflow-hidden px-6 py-4"
         aria-label="Primary"
       >
         <a
           href="#home"
           onClick={(e) => handleNav(e, 'home')}
-          className="flex items-center gap-2.5"
+          className="flex min-w-0 shrink-0 items-center gap-2.5"
         >
           <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 text-xs font-bold text-white shadow-lg shadow-violet-500/30">
             C

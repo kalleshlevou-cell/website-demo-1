@@ -1,4 +1,37 @@
+import { useEffect, useState } from 'react'
+
+const SUBTITLES = [
+  'AI automation built for real outcomes.',
+  'Cloud architecture that scales globally.',
+  'Software that ships on time.',
+]
+
+const STATS = [
+  { value: '98%', label: 'Retention' },
+  { value: '24/7', label: 'Support' },
+  { value: '3×', label: 'ROI Uplift' },
+  { value: '6+', label: 'Global Reach' },
+]
+
 export function Hero() {
+  const [subtitleIndex, setSubtitleIndex] = useState(0)
+  const [visible, setVisible] = useState(true)
+
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) return
+
+    const id = setInterval(() => {
+      setVisible(false)
+      setTimeout(() => {
+        setSubtitleIndex((i) => (i + 1) % SUBTITLES.length)
+        setVisible(true)
+      }, 500)
+    }, 2800)
+
+    return () => clearInterval(id)
+  }, [])
+
   return (
     <section id="home" className="relative overflow-hidden">
       <div
@@ -17,13 +50,22 @@ export function Hero() {
             The optimistic architect
           </span>
 
-          <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="mt-6 text-4xl font-bold tracking-tight break-words sm:text-5xl lg:text-6xl">
             Architecture with intent.
             <br />
             <span className="text-gradient">Engineering with optimism.</span>
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
+          {/* Cycling subtitle */}
+          <p
+            className={`mt-4 text-base font-medium text-violet-300 transition-opacity duration-500 sm:text-lg ${
+              visible ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            {SUBTITLES[subtitleIndex]}
+          </p>
+
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
             Cynbit is a software studio that designs and ships products,
             growth, AI, and cloud systems with the calm confidence of an
             architect who has done this before.{' '}
@@ -47,6 +89,19 @@ export function Hero() {
             >
               Explore the Cynbit edge
             </a>
+          </div>
+
+          {/* Stat pills */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+            {STATS.map((s) => (
+              <span
+                key={s.label}
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs"
+              >
+                <span className="font-semibold text-white">{s.value}</span>
+                <span className="text-slate-400">{s.label}</span>
+              </span>
+            ))}
           </div>
         </div>
       </div>

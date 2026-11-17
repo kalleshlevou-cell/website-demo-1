@@ -20,7 +20,7 @@ export function Testimonials() {
           {testimonials.map((testimonial) => (
             <figure
               key={testimonial.id}
-              className="card flex flex-col rounded-2xl p-6"
+              className="card flex flex-col overflow-hidden rounded-2xl p-6 break-words"
             >
               <blockquote className="text-sm leading-relaxed text-slate-200">
                 &ldquo;{testimonial.quote}&rdquo;

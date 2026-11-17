@@ -42,6 +42,7 @@ export function Wizard({ draft, update, onGenerate }: WizardProps) {
 
   return (
     <div className="glass rounded-3xl p-6 sm:p-8">
+      <p className="text-xs text-slate-400 mb-4">Step {step + 1} of {STEPS.length}</p>
       <ol className="flex items-center" aria-label="Scope Studio progress">
         {STEPS.map((s, i) => {
           const done = i < step
@@ -83,6 +84,14 @@ export function Wizard({ draft, update, onGenerate }: WizardProps) {
           )
         })}
       </ol>
+
+      {/* Progress bar */}
+      <div className="mt-4 h-1 w-full rounded-full bg-white/10">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 transition-all duration-500"
+          style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
+        />
+      </div>
 
       {/* key={step} remounts on step change so the enter animation replays */}
       <div key={step} className="mt-8 wizard-step">

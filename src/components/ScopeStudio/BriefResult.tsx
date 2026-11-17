@@ -50,11 +50,11 @@ function Field({ label, value }: { label: string; value: string }) {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+    <div className="rounded-2xl border-l-4 border-violet-500/60 border border-white/10 bg-white/[0.02] p-4">
       <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
         {label}
       </p>
-      <p className="mt-1 text-lg font-semibold text-white">{value}</p>
+      <p className="mt-1 text-lg font-semibold text-gradient">{value}</p>
     </div>
   )
 }
@@ -197,7 +197,7 @@ export function BriefResult({ brief, shareUrl, onReset }: BriefResultProps) {
       {/* Phases */}
       <div className="brief-reveal mt-8" style={{ animationDelay: '240ms' }}>
         <SectionLabel>Phases ({brief.weeks} weeks)</SectionLabel>
-        <div className="mt-3 overflow-hidden rounded-xl border border-white/10">
+        <div className="mt-3 overflow-x-auto overflow-hidden rounded-xl border border-white/10">
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-white/[0.03] text-left text-xs uppercase tracking-widest text-slate-400">
@@ -208,7 +208,7 @@ export function BriefResult({ brief, shareUrl, onReset }: BriefResultProps) {
             </thead>
             <tbody>
               {brief.phases.map((p) => (
-                <tr key={p.name} className="border-t border-white/10">
+                <tr key={p.name} className="border-t border-white/10 hover:bg-white/[0.03] transition">
                   <td className="px-4 py-2.5 text-slate-100">{p.name}</td>
                   <td className="px-4 py-2.5 text-right text-slate-400">{p.percent}%</td>
                   <td className="px-4 py-2.5 text-right text-slate-200">{p.weeks}</td>
@@ -228,7 +228,10 @@ export function BriefResult({ brief, shareUrl, onReset }: BriefResultProps) {
               key={m.role}
               className="flex items-center justify-between text-sm"
             >
-              <span className="text-slate-200">{m.role}</span>
+              <span className="flex items-center text-slate-200">
+                <span className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full bg-violet-500/60" />
+                {m.role}
+              </span>
               <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-slate-300">
                 {m.count}
               </span>
@@ -255,7 +258,7 @@ export function BriefResult({ brief, shareUrl, onReset }: BriefResultProps) {
         ) : (
           <ul className="mt-3 space-y-2">
             {brief.risks.map((r) => (
-              <li key={r.title} className="text-sm text-slate-300">
+              <li key={r.title} className="border-l-2 border-violet-500/40 pl-3 text-sm text-slate-300">
                 <span className="font-medium text-white">{r.title}</span>
                 <span className="text-slate-400"> &mdash; {r.mitigation}</span>
               </li>
@@ -279,7 +282,7 @@ export function BriefResult({ brief, shareUrl, onReset }: BriefResultProps) {
         <SectionLabel>ROI / value notes</SectionLabel>
         <ul className="mt-3 space-y-2">
           {brief.roiNotes.map((n) => (
-              <li key={n} className="text-sm text-slate-300">
+              <li key={n} className="border-l-2 border-violet-500/40 pl-3 text-sm text-slate-300">
                 {n}
               </li>
             ))}
@@ -287,38 +290,47 @@ export function BriefResult({ brief, shareUrl, onReset }: BriefResultProps) {
       </div>
 
       {/* Actions: lead CTA first, then the utility actions */}
-      <div className="brief-reveal mt-10 space-y-4" style={{ animationDelay: '600ms' }}>
-        <button
-          type="button"
-          onClick={handleDiscuss}
-          className="btn-primary inline-flex w-full items-center justify-center rounded-xl px-5 py-3 text-sm sm:w-auto"
-        >
-          Discuss this with Cynbit
-        </button>
-        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+      <div className="brief-reveal mt-10" style={{ animationDelay: '600ms' }}>
+        <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
           <button
             type="button"
-            onClick={handleDownload}
-            className="btn-ghost inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm"
+            onClick={handleDiscuss}
+            className="btn-primary inline-flex w-full items-center justify-center rounded-xl px-5 py-3 text-sm sm:w-auto"
           >
-            <DownloadIcon className="h-4 w-4" />
-            Download brief (.md)
+            Discuss this with Cynbit
           </button>
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <button
+              type="button"
+              onClick={handleDownload}
+              className="btn-ghost inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm"
+            >
+              <DownloadIcon className="h-4 w-4" />
+              Download brief (.md)
+            </button>
+            <button
+              type="button"
+              onClick={handleCopyLink}
+              className="btn-ghost inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm"
+            >
+              <LinkIcon className="h-4 w-4" />
+              {copied === 'link' ? 'Copied!' : 'Copy share link'}
+            </button>
+            <button
+              type="button"
+              onClick={handleCopyMarkdown}
+              className="btn-ghost inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm"
+            >
+              <CopyIcon className="h-4 w-4" />
+              {copied === 'markdown' ? 'Copied!' : 'Copy as Markdown'}
+            </button>
+          </div>
           <button
             type="button"
-            onClick={handleCopyLink}
-            className="btn-ghost inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm"
+            onClick={onReset}
+            className="btn-ghost inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm sm:ml-auto"
           >
-            <LinkIcon className="h-4 w-4" />
-            {copied === 'link' ? 'Copied!' : 'Copy share link'}
-          </button>
-          <button
-            type="button"
-            onClick={handleCopyMarkdown}
-            className="btn-ghost inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm"
-          >
-            <CopyIcon className="h-4 w-4" />
-            {copied === 'markdown' ? 'Copied!' : 'Copy as Markdown'}
+            Start over
           </button>
         </div>
       </div>
@@ -331,19 +343,6 @@ export function BriefResult({ brief, shareUrl, onReset }: BriefResultProps) {
         Estimates are guidance, not quotes. Final scope, timeline, and budget
         are confirmed together in a discovery call.
       </p>
-
-      <div
-        className="brief-reveal mt-6 flex justify-center"
-        style={{ animationDelay: '720ms' }}
-      >
-        <button
-          type="button"
-          onClick={onReset}
-          className="btn-ghost inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm"
-        >
-          Start over
-        </button>
-      </div>
     </div>
   )
 }

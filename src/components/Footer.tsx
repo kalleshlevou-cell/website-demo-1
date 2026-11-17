@@ -10,10 +10,10 @@ const FOOTER_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-white/10 bg-slate-950/60">
+    <footer className="relative overflow-hidden border-t border-white/10 bg-slate-950/60">
       <div className="mx-auto max-w-6xl px-6 py-16">
         {/* Final CTA */}
-        <div className="glass rounded-3xl p-8 text-center sm:p-12">
+        <div className="glass overflow-hidden rounded-3xl p-8 text-center sm:p-12">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Ready to scope your project?
           </h2>
