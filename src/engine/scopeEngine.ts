@@ -315,7 +315,8 @@ function buildSummary(
   const budgetLabel =
     input.budgetTier === 'not_sure' ? 'Estimated' : TIER_LABELS[input.budgetTier]
   const article = startsWithVowel(teamSize) ? 'an' : 'a'
-  return `A ${scaleLabel} ${typeLabel} with ${input.features.length} core features \u2014 estimated ${weeks} weeks across ${article} ${teamSize}-person team in the ${budgetLabel} range.`
+  const scaleArticle = ['enterprise'].includes(input.audienceScale) ? 'An' : 'A'
+  return `${scaleArticle} ${scaleLabel} ${typeLabel} with ${input.features.length} core features \u2014 estimated ${weeks} weeks across ${article} ${teamSize}-person team in the ${budgetLabel} range.`
 }
 
 // --- Public API -----------------------------------------------------------
