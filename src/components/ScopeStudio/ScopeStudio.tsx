@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { computeBrief, decodeInput, encodeInput } from '../../engine/scopeEngine'
 import type { Brief, ScopeInput } from '../../types'
+import { BriefResult } from './BriefResult'
 import { Wizard } from './Wizard'
 import type { WizardDraft } from './steps'
 
@@ -34,87 +35,6 @@ function toScopeInput(draft: WizardDraft): ScopeInput | null {
 
 function shareUrlFor(input: ScopeInput): string {
   return `${window.location.pathname}?${SHARE_PARAM}=${encodeInput(input)}${window.location.hash}`
-}
-
-// Minimal result placeholder. The full BriefResult view lands in a later step;
-// for now we surface the headline numbers and keep the result shareable.
-function ResultView({ brief, onReset }: { brief: Brief; onReset: () => void }) {
-  const teamSize = brief.team.reduce((sum, m) => sum + m.count, 0)
-  return (
-    <div className="glass rounded-3xl p-6 sm:p-8">
-      <p className="text-sm font-semibold uppercase tracking-widest text-violet-400">
-        Your scope brief
-      </p>
-      <h3 className="mt-2 text-xl font-bold text-white sm:text-2xl">
-        Project scope, generated
-      </h3>
-      <p className="mt-5 text-base leading-relaxed text-slate-200">{brief.summary}</p>
-
-      <div className="mt-6 grid gap-3 sm:grid-cols-3">
-        <Stat label="Est. duration" value={`${brief.weeks} weeks`} />
-        <Stat label="Budget" value={brief.estimatedBudgetRange} />
-        <Stat label="Team size" value={`${teamSize} people`} />
-      </div>
-
-      {brief.selectedFeatures.length > 0 && (
-        <div className="mt-6">
-          <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-            Core features
-          </p>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {brief.selectedFeatures.map((f) => (
-              <span
-                key={f}
-                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300"
-              >
-                {f}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {brief.risks.length > 0 && (
-        <div className="mt-6">
-          <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-            Top risks to plan for
-          </p>
-          <ul className="mt-2 space-y-2">
-            {brief.risks.slice(0, 3).map((r) => (
-              <li key={r.title} className="text-sm text-slate-300">
-                <span className="font-medium text-white">{r.title}</span>
-                <span className="text-slate-400"> &mdash; {r.mitigation}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs text-slate-500">
-          This link now reproduces your brief &mdash; share it.
-        </p>
-        <button
-          type="button"
-          onClick={onReset}
-          className="btn-ghost inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm"
-        >
-          Start over
-        </button>
-      </div>
-    </div>
-  )
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-      <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-        {label}
-      </p>
-      <p className="mt-1 text-lg font-semibold text-white">{value}</p>
-    </div>
-  )
 }
 
 export function ScopeStudio() {
@@ -164,6 +84,11 @@ export function ScopeStudio() {
     }
   }
 
+  // The brief is only set once every required field is filled (via generate or
+  // via a decoded share param), so a non-null input is guaranteed alongside it.
+  const input = toScopeInput(draft)
+  const shareUrl = input ? shareUrlFor(input) : ''
+
   return (
     <section id="studio" className="relative py-20 sm:py-28">
       <div className="mx-auto max-w-3xl px-6">
@@ -182,8 +107,8 @@ export function ScopeStudio() {
         </div>
 
         <div className="mt-10">
-          {brief ? (
-            <ResultView brief={brief} onReset={startOver} />
+          {brief && input ? (
+            <BriefResult brief={brief} shareUrl={shareUrl} onReset={startOver} />
           ) : (
             <Wizard draft={draft} update={update} onGenerate={generate} />
           )}
