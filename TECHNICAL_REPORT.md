@@ -117,7 +117,7 @@ Steps mount with a `wizard-step-enter` animation. The progress bar shows complet
 - **Download brief (.md)** — calls `briefToMarkdown(brief)`, wraps in a `Blob`, creates an object URL, triggers a programmatic `<a>` click, and revokes the URL immediately.
 - **Copy share link** — calls `history.replaceState` to sync the address bar, then writes the URL to the clipboard (`navigator.clipboard.writeText` with a `document.execCommand` fallback for non-secure contexts).
 - **Copy as Markdown** — same clipboard path, content is `briefToMarkdown(brief)`.
-- **Discuss this with Cynbit** — constructs a `mailto:hello@cynbit.com` URI with the one-liner as subject and a body containing: the one-line summary, the share URL, and the full Markdown brief.
+- **Discuss this with Cynbit** — constructs a `mailto:hello@cynbit.com` URI with the one-liner as subject and a compact body: the one-line summary, the share URL (so the recipient can open the full brief), and the five headline fields (project type, scale, timeline, budget, duration). The body is kept short deliberately — email clients silently truncate `mailto:` URIs beyond roughly 2 kB, and the share URL carries the complete brief.
 
 A disclaimer beneath the actions states: *"Estimates are guidance, not quotes. Final scope, timeline, and budget are confirmed together in a discovery call."*
 
@@ -145,8 +145,9 @@ On mount, `ScopeStudio` checks `window.location.search` for the `?scope=` parame
 | `669e3ff` | `refactor(scope-studio): extend engine with month-band timeline and enterprise budget tier` |
 | `a7a51ef` | `feat(scope-studio): add multi-step intake wizard` |
 | `ace9775` | `feat(scope-studio): add generated brief, download/share/lead-CTA, URL sharing` |
+| `9f76354` | `fix(brief-result): trim mailto body to survive email client URI length limits; use stable keys on ROI notes; drop window.setTimeout qualifier` |
 
-**Total:** 20 source files, 2,426 lines of TypeScript/TSX/CSS across 6 commits.
+**Total:** 20 source files, ~2,440 lines of TypeScript/TSX/CSS across 7 feature commits.
 
 ---
 
